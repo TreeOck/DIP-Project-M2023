@@ -2,13 +2,11 @@ import math
 import numpy as np
 import cv2
 
-
 cap_video = cv2.VideoCapture(0)
 contours = {}
 approx = []
 scale = 2
 
-# Define the codec and create VideoWriter object
 fourcc = cv2.VideoWriter_fourcc(*'H264')
 out = cv2.VideoWriter('output.avi',fourcc, 20.0, (640,480))
 
@@ -37,30 +35,76 @@ while(cap_video.isOpened()):
                 approx = cv2.approxPolyDP(cnt, 0.011 * cv2.arcLength(cnt, True), True)
                 cornerCount = len(approx)
                 x, y, w, h = cv2.boundingRect(approx)
+
+                roi = frame[y:y+h, x:x+w]
+                mean_color = cv2.mean(roi)[:3]
+
+                # if cornerCount == 3:
+                #     shape = "triangle"
+                #     cv2.rectangle(frame, (x, y), (x + w, y + h), (0, 0, 255), 1)
+                #     cv2.putText(frame, "Triangle", (x , y), cv2.FONT_HERSHEY_SIMPLEX,  0.85, (255, 0, 255),1 ,cv2.LINE_AA)
+                # elif cornerCount == 6:
+                #     shape = "hexagon"
+                #     cv2.rectangle(frame, (x, y), (x + w, y + h), (0, 0, 255), 1)
+                #     cv2.putText(frame, "Hexagon", (x , y ), cv2.FONT_HERSHEY_COMPLEX,  0.85, (255, 0, 255),1 ,cv2.LINE_AA)
+                # elif cornerCount == 8:
+                #     cv2.rectangle(frame, (x, y), (x + w, y + h), (0, 0, 255), 1)
+                #     cv2.putText(frame, "Octagon", (x , y ), cv2.FONT_HERSHEY_COMPLEX, 0.85, (255, 0, 255),1, cv2.LINE_AA)
+                #     shape = "octagon"
+                # elif cornerCount > 10:
+                #     aspRatio = w / float(h)
+                #     if 0.95 < aspRatio < 1.05:
+                #         cv2.rectangle(frame, (x, y), (x + w, y + h), (0, 0, 255), 1)
+                #         cv2.putText(frame, "Circle", (x , y ), cv2.FONT_HERSHEY_COMPLEX,  0.85, (255, 0, 255),1, cv2.LINE_AA)
+                #         shape = "circle"
+                #     else:
+                #         cv2.rectangle(frame, (x, y), (x + w, y + h), (0, 0, 255), 1)
+                #         cv2.putText(frame, "Oval", (x , y ), cv2.FONT_HERSHEY_COMPLEX,  0.85, (255, 0, 255),1, cv2.LINE_AA)
+                #         shape = "oval"
+                # else:
+                #     pass
+
                 if cornerCount == 3:
-                    shape = "triangle"
+                    if mean_color[2] > 150 and mean_color[1] < 50 and mean_color[0] < 50:
+                        shape = "STOP"
+                    else:
+                        shape = "triangle"
+
                     cv2.rectangle(frame, (x, y), (x + w, y + h), (0, 0, 255), 1)
-                    cv2.putText(frame, "Triangle", (x , y), cv2.FONT_HERSHEY_SIMPLEX,  0.85, (255, 0, 255),1 ,cv2.LINE_AA)
+                    cv2.putText(frame, f"{shape}", (x, y), cv2.FONT_HERSHEY_SIMPLEX, 0.85, (255, 0, 255), 1, cv2.LINE_AA)
+
                 elif cornerCount == 6:
-                    shape = "hexagon"
+                    if mean_color[2] > 150 and mean_color[1] < 50 and mean_color[0] < 50:
+                        shape = "STOP"
+                    else:
+                        shape = "hexagon"
+
                     cv2.rectangle(frame, (x, y), (x + w, y + h), (0, 0, 255), 1)
-                    cv2.putText(frame, "Hexagon", (x , y ), cv2.FONT_HERSHEY_COMPLEX,  0.85, (255, 0, 255),1 ,cv2.LINE_AA)
-                elif cornerCount == 8:
-                    cv2.rectangle(frame, (x, y), (x + w, y + h), (0, 0, 255), 1)
-                    cv2.putText(frame, "Octagon", (x , y ), cv2.FONT_HERSHEY_COMPLEX, 0.85, (255, 0, 255),1, cv2.LINE_AA)
-                    shape = "octagon"
+                    cv2.putText(frame, f"{shape}", (x, y), cv2.FONT_HERSHEY_SIMPLEX, 0.85, (255, 0, 255), 1, cv2.LINE_AA)
+
                 elif cornerCount > 10:
                     aspRatio = w / float(h)
                     if 0.95 < aspRatio < 1.05:
+                        if mean_color[2] > 150 and mean_color[1] < 50 and mean_color[0] < 50:
+                            shape = "STOP"
+                        else:
+                            shape = "circle"
+
                         cv2.rectangle(frame, (x, y), (x + w, y + h), (0, 0, 255), 1)
-                        cv2.putText(frame, "Circle", (x , y ), cv2.FONT_HERSHEY_COMPLEX,  0.85, (255, 0, 255),1, cv2.LINE_AA)
-                        shape = "circle"
+                        cv2.putText(frame, f"{shape}", (x, y), cv2.FONT_HERSHEY_SIMPLEX, 0.85, (255, 0, 255), 1, cv2.LINE_AA)
+
                     else:
+                        if mean_color[2] > 150 and mean_color[1] < 50 and mean_color[0] < 50:
+                            shape = "STOP"
+                        else:
+                            shape = "oval"
+
                         cv2.rectangle(frame, (x, y), (x + w, y + h), (0, 0, 255), 1)
-                        cv2.putText(frame, "Oval", (x , y ), cv2.FONT_HERSHEY_COMPLEX,  0.85, (255, 0, 255),1, cv2.LINE_AA)
-                        shape = "oval"
+                        cv2.putText(frame, f"{shape}", (x, y), cv2.FONT_HERSHEY_SIMPLEX, 0.85, (255, 0, 255), 1, cv2.LINE_AA)
+
                 else:
                     pass
+
                 cv2.drawContours(frame, cnt, -1, (0, 255, 0), 3)
 
         out.write(frame)
