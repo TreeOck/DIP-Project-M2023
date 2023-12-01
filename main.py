@@ -49,10 +49,18 @@ while(cap_video.isOpened()):
                     cv2.rectangle(frame, (x, y), (x + w, y + h), (0, 0, 255), 1)
                     cv2.putText(frame, "Octagon", (x , y ), cv2.FONT_HERSHEY_COMPLEX, 0.85, (255, 0, 255),1, cv2.LINE_AA)
                     shape = "octagon"
+                elif cornerCount > 10:
+                    aspRatio = w / float(h)
+                    if 0.95 < aspRatio < 1.05:
+                        cv2.rectangle(frame, (x, y), (x + w, y + h), (0, 0, 255), 1)
+                        cv2.putText(frame, "Circle", (x , y ), cv2.FONT_HERSHEY_COMPLEX,  0.85, (255, 0, 255),1, cv2.LINE_AA)
+                        shape = "circle"
+                    else:
+                        cv2.rectangle(frame, (x, y), (x + w, y + h), (0, 0, 255), 1)
+                        cv2.putText(frame, "Oval", (x , y ), cv2.FONT_HERSHEY_COMPLEX,  0.85, (255, 0, 255),1, cv2.LINE_AA)
+                        shape = "oval"
                 else:
-                    shape = "unknown"
-                    cv2.rectangle(frame, (x, y), (x + w, y + h), (0, 0, 255), 1)
-                    cv2.putText(frame, "Unknown", (x , y ), cv2.FONT_HERSHEY_COMPLEX,  0.85, (255, 0, 255),1, cv2.LINE_AA)
+                    pass
                 cv2.drawContours(frame, cnt, -1, (0, 255, 0), 3)
 
         out.write(frame)
