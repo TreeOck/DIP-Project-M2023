@@ -7,8 +7,9 @@ contours = {}
 approx = []
 scale = 2
 
-fourcc = cv2.VideoWriter_fourcc(*'H264')
-out = cv2.VideoWriter('output.avi',fourcc, 20.0, (640,480))
+fourcc = cv2.VideoWriter_fourcc(*'XVID')
+out = cv2.VideoWriter('output.avi', fourcc, 20.0, (640, 480))
+
 
 def calculate_angle(pt1, pt2, pt0):
     vector1 = [pt1[0][0] - pt0[0][0], pt1[0][1] - pt0[0][1]]
@@ -21,11 +22,12 @@ def calculate_angle(pt1, pt2, pt0):
     angle = math.acos(dot_product / (magnitude1 * magnitude2 + 1e-10))
     return math.degrees(angle)
 
-while(cap_video.isOpened()):
+
+while cap_video.isOpened():
     ret, frame = cap_video.read()
-    if ret==True:
+    if ret == True:
         gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
-        canny = cv2.Canny(frame,80,240,3)
+        canny = cv2.Canny(frame, 80, 240, 3)
         contours, hierarchy = cv2.findContours(canny, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
 
         for cnt in contours:
@@ -36,7 +38,7 @@ while(cap_video.isOpened()):
                 cornerCount = len(approx)
                 x, y, w, h = cv2.boundingRect(approx)
 
-                roi = frame[y:y+h, x:x+w]
+                roi = frame[y:y + h, x:x + w]
                 mean_color = cv2.mean(roi)[:3]
 
                 # if cornerCount == 3:
@@ -71,7 +73,8 @@ while(cap_video.isOpened()):
                         shape = "triangle"
 
                     cv2.rectangle(frame, (x, y), (x + w, y + h), (0, 0, 255), 1)
-                    cv2.putText(frame, f"{shape}", (x, y), cv2.FONT_HERSHEY_SIMPLEX, 0.85, (255, 0, 255), 1, cv2.LINE_AA)
+                    cv2.putText(frame, f"{shape}", (x, y), cv2.FONT_HERSHEY_SIMPLEX, 0.85, (255, 0, 255), 1,
+                                cv2.LINE_AA)
 
                 elif cornerCount == 6:
                     if mean_color[2] > 150 and mean_color[1] < 50 and mean_color[0] < 50:
@@ -80,7 +83,8 @@ while(cap_video.isOpened()):
                         shape = "hexagon"
 
                     cv2.rectangle(frame, (x, y), (x + w, y + h), (0, 0, 255), 1)
-                    cv2.putText(frame, f"{shape}", (x, y), cv2.FONT_HERSHEY_SIMPLEX, 0.85, (255, 0, 255), 1, cv2.LINE_AA)
+                    cv2.putText(frame, f"{shape}", (x, y), cv2.FONT_HERSHEY_SIMPLEX, 0.85, (255, 0, 255), 1,
+                                cv2.LINE_AA)
 
                 elif cornerCount > 10:
                     aspRatio = w / float(h)
@@ -91,7 +95,8 @@ while(cap_video.isOpened()):
                             shape = "circle"
 
                         cv2.rectangle(frame, (x, y), (x + w, y + h), (0, 0, 255), 1)
-                        cv2.putText(frame, f"{shape}", (x, y), cv2.FONT_HERSHEY_SIMPLEX, 0.85, (255, 0, 255), 1, cv2.LINE_AA)
+                        cv2.putText(frame, f"{shape}", (x, y), cv2.FONT_HERSHEY_SIMPLEX, 0.85, (255, 0, 255), 1,
+                                    cv2.LINE_AA)
 
                     else:
                         if mean_color[2] > 150 and mean_color[1] < 50 and mean_color[0] < 50:
@@ -100,7 +105,8 @@ while(cap_video.isOpened()):
                             shape = "oval"
 
                         cv2.rectangle(frame, (x, y), (x + w, y + h), (0, 0, 255), 1)
-                        cv2.putText(frame, f"{shape}", (x, y), cv2.FONT_HERSHEY_SIMPLEX, 0.85, (255, 0, 255), 1, cv2.LINE_AA)
+                        cv2.putText(frame, f"{shape}", (x, y), cv2.FONT_HERSHEY_SIMPLEX, 0.85, (255, 0, 255), 1,
+                                    cv2.LINE_AA)
 
                 else:
                     pass
