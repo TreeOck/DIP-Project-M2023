@@ -68,9 +68,9 @@ while cap_video.isOpened():
 
                 if cornerCount == 3:
                     if mean_color[2] > 150 and mean_color[1] < 50 and mean_color[0] < 50:
-                        shape = "STOP"
+                        shape = "YIELD"
                     else:
-                        shape = "triangle"
+                        shape = ""
 
                     cv2.rectangle(frame, (x, y), (x + w, y + h), (0, 0, 255), 1)
                     cv2.putText(frame, f"{shape}", (x, y), cv2.FONT_HERSHEY_SIMPLEX, 0.85, (255, 0, 255), 1,
@@ -80,33 +80,33 @@ while cap_video.isOpened():
                     if mean_color[2] > 150 and mean_color[1] < 50 and mean_color[0] < 50:
                         shape = "STOP"
                     else:
-                        shape = "hexagon"
+                        shape = ""
 
                     cv2.rectangle(frame, (x, y), (x + w, y + h), (0, 0, 255), 1)
                     cv2.putText(frame, f"{shape}", (x, y), cv2.FONT_HERSHEY_SIMPLEX, 0.85, (255, 0, 255), 1,
                                 cv2.LINE_AA)
-
-                elif cornerCount > 10:
-                    aspRatio = w / float(h)
-                    if 0.95 < aspRatio < 1.05:
-                        if mean_color[2] > 150 and mean_color[1] < 50 and mean_color[0] < 50:
-                            shape = "STOP"
-                        else:
-                            shape = "circle"
-
-                        cv2.rectangle(frame, (x, y), (x + w, y + h), (0, 0, 255), 1)
-                        cv2.putText(frame, f"{shape}", (x, y), cv2.FONT_HERSHEY_SIMPLEX, 0.85, (255, 0, 255), 1,
-                                    cv2.LINE_AA)
-
-                    else:
-                        if mean_color[2] > 150 and mean_color[1] < 50 and mean_color[0] < 50:
-                            shape = "STOP"
-                        else:
-                            shape = "oval"
-
-                        cv2.rectangle(frame, (x, y), (x + w, y + h), (0, 0, 255), 1)
-                        cv2.putText(frame, f"{shape}", (x, y), cv2.FONT_HERSHEY_SIMPLEX, 0.85, (255, 0, 255), 1,
-                                    cv2.LINE_AA)
+                #
+                # elif cornerCount > 10:
+                #     aspRatio = w / float(h)
+                #     if 0.95 < aspRatio < 1.05:
+                #         if mean_color[2] > 150 and mean_color[1] < 50 and mean_color[0] < 50:
+                #             shape = "STOP"
+                #         else:
+                #             shape = "circle"
+                #
+                #         cv2.rectangle(frame, (x, y), (x + w, y + h), (0, 0, 255), 1)
+                #         cv2.putText(frame, f"{shape}", (x, y), cv2.FONT_HERSHEY_SIMPLEX, 0.85, (255, 0, 255), 1,
+                #                     cv2.LINE_AA)
+                #
+                #     else:
+                #         if mean_color[2] > 150 and mean_color[1] < 50 and mean_color[0] < 50:
+                #             shape = "STOP"
+                #         else:
+                #             shape = "oval"
+                #
+                #         cv2.rectangle(frame, (x, y), (x + w, y + h), (0, 0, 255), 1)
+                #         cv2.putText(frame, f"{shape}", (x, y), cv2.FONT_HERSHEY_SIMPLEX, 0.85, (255, 0, 255), 1,
+                #                     cv2.LINE_AA)
 
                 else:
                     pass
