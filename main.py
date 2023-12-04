@@ -40,10 +40,10 @@ while cap_video.isOpened():
 
                 roi = frame[y:y + h, x:x + w]
 
-                red_threshold = 50
+                # red_threshold = 50
                 mean_color = cv2.mean(roi)[:3]
                 if cornerCount == 3:
-                    if mean_color[2] > red_threshold:
+                    if mean_color[2] > 50:
                         shape = "YIELD"
                     else:
                         shape = "triangle"
@@ -53,7 +53,7 @@ while cap_video.isOpened():
                                 cv2.LINE_AA)
 
                 elif cornerCount == 8:
-                    if mean_color[2] > red_threshold:
+                    if mean_color[2] > 50 and mean_color[1] < 150 and mean_color[0] < 150:
                         shape = "STOP"
                     else:
                         shape = "octagon"
