@@ -10,19 +10,6 @@ scale = 2
 fourcc = cv2.VideoWriter_fourcc(*'XVID')
 out = cv2.VideoWriter('output.avi', fourcc, 20.0, (640, 480))
 
-
-def calculate_angle(pt1, pt2, pt0):
-    vector1 = [pt1[0][0] - pt0[0][0], pt1[0][1] - pt0[0][1]]
-    vector2 = [pt2[0][0] - pt0[0][0], pt2[0][1] - pt0[0][1]]
-
-    dot_product = vector1[0] * vector2[0] + vector1[1] * vector2[1]
-    magnitude1 = math.sqrt(vector1[0] ** 2 + vector1[1] ** 2)
-    magnitude2 = math.sqrt(vector2[0] ** 2 + vector2[1] ** 2)
-
-    angle = math.acos(dot_product / (magnitude1 * magnitude2 + 1e-10))
-    return math.degrees(angle)
-
-
 while cap_video.isOpened():
     ret, frame = cap_video.read()
     if ret == True:
